@@ -31,8 +31,13 @@ describe('ov-keypad', function () {
 			["F6"]
 		]);
 	});
-	it('processBusEvent ignores event keys it does not support', function () {
+	it('processBusEvent({keys: [0-9a-f]}) ignores event keys it does not support', function () {
 		expect(keypad.processBusEvent({keys: 'bad'})).to.be.undefined;
+	});
+	it('reset() sets extended char position index back to primary character', function () {
+		expect(keypad.processBusEvent({keys: '1'})).to.equal('1');
+		keypad.reset();
+		expect(keypad.processBusEvent({keys: '1'})).to.equal('1');
 	});
 	describe('character layout first key press', function () {
 		it('key 1 returns 1', function () {

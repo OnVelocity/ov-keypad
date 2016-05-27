@@ -39,6 +39,51 @@ describe('ov-keypad', function () {
 		keypad.reset();
 		expect(keypad.processBusEvent({keys: '1'})).to.equal('1');
 	});
+	describe('replacePreviousValue()', function () {
+		it('indicates a key press value should replace the previous key press value', function () {
+			keypad.processBusEvent({keys: '1'});
+			keypad.processBusEvent({keys: '1'});
+			expect(keypad.replacePreviousValue()).to.equal(true);
+		});
+		it('indicates a key press value should not replace the previous key press value', function () {
+			keypad.processBusEvent({keys: '1'});
+			keypad.processBusEvent({keys: '2'});
+			expect(keypad.replacePreviousValue()).to.equal(false);
+		});
+	});
+	describe('replacePreviousValue(timeout)', function () {
+		it('indicates a key press value should replace the previous key press value', function (done) {
+			keypad.processBusEvent({keys: '1'});
+			keypad.replacePreviousValue(1000);
+			keypad.processBusEvent({keys: '1'});
+			expect(keypad.replacePreviousValue(1000)).to.equal(true);
+			done();
+		});
+		it('indicates a key press value should not replace the previous key press value', function (done) {
+			keypad.processBusEvent({keys: '1'});
+			keypad.replacePreviousValue(1);
+			keypad.processBusEvent({keys: '2'});
+			keypad.replacePreviousValue(1);
+			setTimeout(() => {
+				expect(keypad.replacePreviousValue()).to.equal(false);
+				done();
+			}, 3);
+		});
+		it('resets the extended key index so primary key is emitted on key press after timeout', function (done) {
+			keypad.processBusEvent({keys: '1'});
+			keypad.replacePreviousValue(1);
+			setTimeout(() => {
+				expect(keypad.processBusEvent({keys: '1'})).to.equal('1');
+				done();
+			}, 3);
+		});
+	});
+	describe('replacePreviousValue(timeout, callback)', function () {
+		it('it should invoke callback when key press wait times out', function (done) {
+			keypad.processBusEvent({keys: '1'});
+			keypad.replacePreviousValue(1, done);
+		});
+	});
 	describe('character layout first key press', function () {
 		it('key 1 returns 1', function () {
 			expect(keypad.processBusEvent({keys: '1'})).to.equal('1');

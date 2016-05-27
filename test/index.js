@@ -69,6 +69,15 @@ describe('ov-keypad', function () {
 				done();
 			}, 3);
 		});
+		it('should return false when same key pressed after timeout', function (done) {
+			keypad.processBusEvent({keys: '1'});
+			keypad.replacePreviousValue(1);
+			setTimeout(() => {
+				keypad.processBusEvent({keys: '1'});
+				expect(keypad.replacePreviousValue(1)).to.equal(false);
+				done();
+			}, 3);
+		});
 		it('resets the extended key index so primary key is emitted on key press after timeout', function (done) {
 			keypad.processBusEvent({keys: '1'});
 			keypad.replacePreviousValue(1);

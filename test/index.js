@@ -31,6 +31,27 @@ describe('ov-keypad', function () {
 			["F3"]
 		]);
 	});
+	it('overrides the default extended keypad', function () {
+		keypad = new Keypad({
+			pad1: [1],
+			pad2: [2],
+			pad3: [3],
+			pad4: [4],
+			pad5: [5],
+			pad6: [6],
+			pad7: [7],
+			pad8: [8],
+			pad9: [9],
+			pad0: [0],
+			padA: ['A'],
+			padB: ['B'],
+			padC: ['C'],
+			padD: ['D'],
+			padE: ['E'],
+			padF: ['F']
+		});
+		expect(keypad.keys()).to.eql([[1], [2], [3], [4], [5], [6], [7], [8], [9], [0], ['A'], ['B'], ['C'], ['D'], ['E'], ['F']]);
+	});
 	it('processBusEvent({keys: [0-9a-f]}) ignores event keys it does not support', function () {
 		expect(keypad.processBusEvent({keys: 'bad'})).to.be.undefined;
 	});
@@ -38,6 +59,9 @@ describe('ov-keypad', function () {
 		expect(keypad.processBusEvent({keys: '1'})).to.equal('1');
 		keypad.reset();
 		expect(keypad.processBusEvent({keys: '1'})).to.equal('1');
+	});
+	it('keypadNames() exports the key pad display names', function () {
+		expect(keypad.keypadNames()).to.eql(['1', '2', '3', 'F', '4', '5', '6', 'E', '7', '8', '9', 'D', 'A', '0', 'B', 'C']);
 	});
 	describe('replacePreviousValue()', function () {
 		it('indicates a key press value should replace the previous key press value', function () {

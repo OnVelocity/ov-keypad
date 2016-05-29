@@ -55,6 +55,11 @@ describe('ov-keypad', function () {
 	it('processBusEvent({keys: [0-9a-f]}) ignores event keys it does not support', function () {
 		expect(keypad.processBusEvent({keys: 'bad'})).to.be.undefined;
 	});
+	it('processBusEvent({keys: [0-9a-f]}) adds extended keys info to the given bus event object', function () {
+		let busEvent = {keys: 1};
+		keypad.processBusEvent(busEvent);
+		expect(busEvent).to.eql({keys: 1, extendedKeys: ['1', '.', '@', '_', ':'], extendedKeysIndex: 0});
+	});
 	it('reset() sets extended char position index back to primary character', function () {
 		expect(keypad.processBusEvent({keys: '1'})).to.equal('1');
 		keypad.reset();

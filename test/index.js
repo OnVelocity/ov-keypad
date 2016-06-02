@@ -68,6 +68,15 @@ describe('ov-keypad', function () {
 	it('keypadNames() exports the key pad display names', function () {
 		expect(keypad.keypadNames()).to.eql(['1', '2', '3', 'F', '4', '5', '6', 'E', '7', '8', '9', 'D', 'A', '0', 'B', 'C']);
 	});
+	it('processBusEvent() resets extended keys correctly', function () {
+		let busEvent = {keys: 2};
+		keypad.processBusEvent(busEvent);
+		busEvent.keys = 2;
+		keypad.processBusEvent(busEvent);
+		busEvent.keys = 1;
+		keypad.processBusEvent(busEvent);
+		expect(busEvent).to.eql({keys: 1, extendedKeys: ['1', '.', '@', '_', ':'], extendedKeysIndex: 0});
+	});
 	describe('replacePreviousValue()', function () {
 		it('indicates a key press value should replace the previous key press value', function () {
 			keypad.processBusEvent({keys: '1'});
